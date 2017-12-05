@@ -3,11 +3,10 @@
 
 function kemi_social_images_options_enqueue_scripts() {
 
-    if ( 'settings_page_kemi_social_images' == get_current_screen() -> id ) {
-        wp_enqueue_script('kemi-image-upload', plugin_dir_url( __FILE__ ) .'../js/image-upload.js',  array('jquery') );
-
-    }
-
+  if ( 'settings_page_kemi_social_images' == get_current_screen() -> id ) {
+    wp_enqueue_script('kemi-image-upload', plugin_dir_url( __FILE__ ) .'../js/image-upload.js',  array('jquery') );
+  }
+  
 }
 add_action('admin_enqueue_scripts', 'kemi_social_images_options_enqueue_scripts');
 /**
