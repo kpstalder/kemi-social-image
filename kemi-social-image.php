@@ -20,7 +20,7 @@ require_once( 'admin/post-meta-box.php' );
 
 add_filter('wpseo_opengraph_image','add_custom_social_image' , 10, 2 );
 add_filter('wpseo_twitter_image','add_custom_social_image' , 10, 2 );
- function add_custom_social_image(){
+function add_custom_social_image(){
   //Logic Order
     // 1st - Social Image on post
     // 2nd - Featured Image on post
@@ -30,4 +30,4 @@ add_filter('wpseo_twitter_image','add_custom_social_image' , 10, 2 );
 
   return $social_image;
 
- }
+}
