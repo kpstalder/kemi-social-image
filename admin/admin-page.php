@@ -2,16 +2,9 @@
 
 
 function kemi_social_images_options_enqueue_scripts() {
-    wp_register_script( 'kemi-image-upload', plugin_dir_url( __FILE__ ) .'../js/image-upload.js', array('jquery','media-upload','thickbox') );
 
     if ( 'settings_page_kemi_social_images' == get_current_screen() -> id ) {
-        wp_enqueue_script('jquery');
-
-        wp_enqueue_script('thickbox');
-        wp_enqueue_style('thickbox');
-
-        wp_enqueue_script('media-upload');
-        wp_enqueue_script('kemi-image-upload');
+        wp_enqueue_script('kemi-image-upload', plugin_dir_url( __FILE__ ) .'../js/image-upload.js',  array('jquery') );
 
     }
 
@@ -54,16 +47,9 @@ register_setting( 'kemi_social_images', 'kemi_social_images_options' );
     ]
   );
 
-  add_settings_field('kemi_social_images_setting_logo_preview',  __( 'Logo Preview', 'kemi_social_images' ), 'kemi_social_images_setting_logo_preview', 'kemi_social_images', 'kemi_social_images_settings_header');
+
 }
 
-function kemi_social_images_setting_logo_preview() {
-    $options = get_option( 'kemi_social_images_options' );  ?>
-    <div id="upload_logo_preview" style="min-height: 100px;">
-        <img style="max-width:100%;" src="<?php echo esc_url( $options['logo'] ); ?>" />
-    </div>
-    <?php
-}
 /**
 * register our kemi_social_images_settings_init to the admin_init action hook
 */
@@ -96,17 +82,29 @@ function kemi_social_images_cb( $args ) {
   // get the value of the setting we've registered with register_setting()
   $options = get_option( 'kemi_social_images_options' );
   // output the field
+  // Save attachment ID
+
+  wp_enqueue_media();
   ?>
   <input type="text" id="<?php echo esc_attr( $args['label_for'] ); ?>"
   data-custom="<?php echo esc_attr( $args['kemi_social_images_custom_data'] ); ?>"
   name="kemi_social_images_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
-  value="<?php echo $options['kemi_social_images']; ?>"
-  />
-  <input type="text" id="<?php echo esc_attr( $args['label_for'] ); ?>" name="kemi_social_images_options[<?php echo esc_attr( $args['label_for'] ); ?>]" value="<?php echo esc_url( $options['kemi_social_images'] ); ?>" />
-        <input id="upload_logo_button" type="button" class="button" value="<?php _e( 'Upload Logo', 'wptuts' ); ?>" />
-        <span class="description"><?php _e('Upload a Default Social Image.', 'wptuts' ); ?></span>
+  value="<?php echo $options['kemi_social_images']; ?>" />
 
+
+
+
+
+  <div class='image-preview-wrapper'>
+			<img id='image-preview' src='<?php echo wp_get_attachment_url( get_option( 'kemi_social_images_options' ) ); ?>' height='100'>
+		</div>
+		<input id="upload_image_button" type="button" class="button" value="<?php _e( 'Upload image' ); ?>" />
+		<input type='hidden' name='image_attachment_id' id='image_attachment_id' value='<?php echo get_option( 'kemi_social_images_options' ); ?>'>
   <?php
+  if ( isset( $_POST['submit'] ) && isset( $_POST['image_attachment_id'] ) ) :
+		update_option( 'kemi_social_images_options', absint( $_POST['image_attachment_id'] ) );
+    exit();
+	endif;
 }
 
 

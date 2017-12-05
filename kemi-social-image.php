@@ -15,4 +15,5 @@ Domain Path:  /languages
 add_filter( 'wpseo_opengraph_image', '__return_false' );
 add_filter( 'wpseo_twitter_image', '__return_false' );
 
+
 require_once( 'admin/admin-page.php' );
