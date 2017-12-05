@@ -85,20 +85,15 @@ function kemi_social_images_cb( $args ) {
 
   wp_enqueue_media();
   ?>
-  <input type="text" id="<?php echo esc_attr( $args['label_for'] ); ?>"
+  <input type="hidden" id="<?php echo esc_attr( $args['label_for'] ); ?>"
   data-custom="<?php echo esc_attr( $args['kemi_social_images_custom_data'] ); ?>"
   name="kemi_social_images_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
   value="<?php echo $options['kemi_social_images']; ?>" />
-
-
-
-
-
   <div class='image-preview-wrapper'>
-			<img id='image-preview' src='<?php echo wp_get_attachment_url( get_option( 'kemi_social_images_options' ) ); ?>' height='100'>
+			<img id='image-preview' src='<?php echo wp_get_attachment_url(  $options['kemi_social_images'] ); ?>' height='100'>
 		</div>
 		<input id="upload_image_button" type="button" class="button" value="<?php _e( 'Upload image' ); ?>" />
-		<input type='hidden' name='image_attachment_id' id='image_attachment_id' value='<?php echo get_option( 'kemi_social_images_options' ); ?>'>
+		<input type='hidden' name='image_attachment_id' id='image_attachment_id' value='<?php echo $options['kemi_social_images']; ?>'>
   <?php
   if ( isset( $_POST['submit'] ) && isset( $_POST['image_attachment_id'] ) ) :
 		update_option( 'kemi_social_images_options', absint( $_POST['image_attachment_id'] ) );
