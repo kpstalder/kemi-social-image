@@ -6,7 +6,7 @@ function kemi_social_images_options_enqueue_scripts() {
   if ( 'settings_page_kemi_social_images' == get_current_screen() -> id ) {
     wp_enqueue_script('kemi-image-upload', plugin_dir_url( __FILE__ ) .'../js/image-upload.js',  array('jquery') );
   }
-  
+
 }
 add_action('admin_enqueue_scripts', 'kemi_social_images_options_enqueue_scripts');
 /**
@@ -82,7 +82,6 @@ function kemi_social_images_cb( $args ) {
   $options = get_option( 'kemi_social_images_options' );
   // output the field
   // Save attachment ID
-
   wp_enqueue_media();
   ?>
   <input type="hidden" id="<?php echo esc_attr( $args['label_for'] ); ?>"

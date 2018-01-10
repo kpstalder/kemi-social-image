@@ -37,3 +37,46 @@ add_filter('wpseo_twitter_image','add_custom_social_image' , 10, 2 );
   return $social_image;
 
  }
+ function my_own_og_function() {
+     /*
+      Put the logic to determine which image to display here (set the $my_image_url variable)
+     */
+     global $post;
+     do {
+       if ( has_post_thumbnail($post->ID) ){
+           continue;
+       } else if(get_post_meta( $post->ID, '_listing_image_id', true )){
+         $social_image = wp_get_attachment_image_url( get_post_meta( $post->ID, '_listing_image_id', true ), 'full' );
+         $GLOBALS['wpseo_og']->image_output( $social_image ); // This will echo out the og tag in line with other WPSEO og tags
+       }else{
+         $options = get_option( 'kemi_social_images_options' );
+         $social_image = wp_get_attachment_url(  $options['kemi_social_images'] );
+         $GLOBALS['wpseo_og']->image_output( $social_image ); // This will echo out the og tag in line with other WPSEO og tags
+       }
+     } while (0);
+
+//     $GLOBALS['wpseo_og']->options->og_default_image = $social_image."2" ;
+     //$GLOBALS['wpseo_tw']->image_output( $social_image ); // This will echo out the og tag in line with
+
+ }
+ add_action( 'wpseo_opengraph', 'my_own_og_function', 29 );
+ function my_own_twitter_function() {
+     /*
+      Put the logic to determine which image to display here (set the $my_image_url variable)
+     */
+     global $post;
+     do {
+       if ( has_post_thumbnail($post->ID)){
+           break;
+       } else if(get_post_meta( $post->ID, '_listing_image_id', true )){
+         $social_image = wp_get_attachment_image_url( get_post_meta( $post->ID, '_listing_image_id', true ), 'full' );
+          echo '<meta name="twitter:image" content="'.$social_image.'" />';
+       } else{
+         $options = get_option( 'kemi_social_images_options' );
+         $social_image = wp_get_attachment_url(  $options['kemi_social_images'] );
+          echo '<meta name="twitter:image" content="'.$social_image.'" />';
+       }
+     } while (0);
+
+ }
+  add_action( 'wpseo_twitter', 'my_own_twitter_function', 29 );
