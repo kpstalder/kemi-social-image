@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name:  Custom Social Images
-Plugin URI:   https://www.sanctuarymg.com
+Plugin URI:   https://weneedone.com
 Description:  Override Yoast Social to have default social image
 Version:      20171203
-Author:       Kevin Stalder
-Author URI:   https://www.sanctuarymg.com
+Author:       Kevin Stalder & Michael Schut
+Author URI:   https://weneedone.com
 License:      GPL2
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain:  KemiCreative
