@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name:  Custom Social Images
-Plugin URI:   https://www.sanctuarymg.com
+Plugin URI:   https://weneedone.com
 Description:  Override Yoast Social to have default social image
 Version:      20171203
-Author:       Kevin Stalder
-Author URI:   https://www.sanctuarymg.com
+Author:       Kevin Stalder & Michael Schut
+Author URI:   https://weneedone.com
 License:      GPL2
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain:  KemiCreative
@@ -18,9 +18,10 @@ Domain Path:  /languages
 require_once( 'admin/admin-page.php' );
 require_once( 'admin/post-meta-box.php' );
 
-add_filter('wpseo_opengraph_image','add_custom_social_image' , 10, 2 );
-add_filter('wpseo_twitter_image','add_custom_social_image' , 10, 2 );
- function add_custom_social_image(){
+add_action( 'wpseo_add_opengraph_images', 'add_custom_social_image', 10);
+// add_filter('wpseo_twitter_image','testing_123' , 10, 2 );
+
+function add_custom_social_image($object){
   //Logic Order
     // 1st - Social Image on post
     // 2nd - Featured Image on post
@@ -28,13 +29,14 @@ add_filter('wpseo_twitter_image','add_custom_social_image' , 10, 2 );
   global $post;
   if(get_post_meta( $post->ID, '_listing_image_id', true )){
     $social_image = wp_get_attachment_image_url( get_post_meta( $post->ID, '_listing_image_id', true ), 'full' );
+    $object->add_image($social_image);
   } else if ( has_post_thumbnail($post->ID)){
-      $social_image = get_the_post_thumbnail_url($post->ID);
-  }else{
+  } else {
     $options = get_option( 'kemi_social_images_options' );
     $social_image = wp_get_attachment_url(  $options['kemi_social_images'] );
+    $object->add_image($social_image);
   }
-  return $social_image;
+
 
  }
  function my_own_og_function() {
@@ -59,7 +61,7 @@ add_filter('wpseo_twitter_image','add_custom_social_image' , 10, 2 );
      //$GLOBALS['wpseo_tw']->image_output( $social_image ); // This will echo out the og tag in line with
 
  }
- add_action( 'wpseo_opengraph', 'my_own_og_function', 29 );
+ //add_action( 'wpseo_opengraph', 'my_own_og_function', 29 );
  function my_own_twitter_function() {
      /*
       Put the logic to determine which image to display here (set the $my_image_url variable)
@@ -79,4 +81,4 @@ add_filter('wpseo_twitter_image','add_custom_social_image' , 10, 2 );
      } while (0);
 
  }
-  add_action( 'wpseo_twitter', 'my_own_twitter_function', 29 );
+//  add_action( 'wpseo_twitter', 'my_own_twitter_function', 29 );
