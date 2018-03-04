@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name:  Custom Social Images
+Plugin Name:  Cabinet Selector CSV importer
 Plugin URI:   https://weneedone.com
 Description:  Override Yoast Social to have default social image
 Version:      20171203
@@ -12,49 +12,40 @@ Text Domain:  KemiCreative
 Domain Path:  /languages
 */
 
+/* Alert Bar */
+add_action( 'wp_ajax_nopriv_convert_csv', 'convert_csv_function' );
+add_action( 'wp_ajax_convert_csv', 'convert_csv_function' );
+function convert_csv_function(){
+  $csv = $_POST['csv'];
+  $row = 1;
+  $handle = fopen($csv, "r");
+  if (($handle = fopen($csv, "r")) !== FALSE) {
+    echo 'open';
+    $class = array();
+    $colors = array();
+    while (($data = fgetcsv($handle)) !== FALSE) {
+      if($row == 1){
+        $row++; continue;
+      }
+      if( array_key_exists($data[3], $class)){
+        if (!in_array($data[9], $colors, true) && $data[9]){
+          array_push($colors, $data[9]);
+          $class[$data[3]]= $colors;
+        }
+      }
+      else{
+        $colors = array();
+        array_push($colors, $data[9]);
+        $class[$data[3]]= $colors;
 
-
-
+      }
+      $row++;
+    }
+    fclose($handle);
+    echo '<pre>';
+    print_r($class);
+    echo '</pre>';
+  }
+  die();
+}
 require_once( 'admin/admin-page.php' );
-require_once( 'admin/post-meta-box.php' );
-
-
-function custom_social_image(){
-  global $post;
-  if(get_post_meta( $post->ID, '_listing_image_id', true )){
-    $social_image = wp_get_attachment_image_url( get_post_meta( $post->ID, '_listing_image_id', true ), 'full' );
-  } else if ( has_post_thumbnail($post->ID)){
-      $social_image = get_the_post_thumbnail_url($post->ID);
-  }else{
-    $options = get_option( 'kemi_social_images_options' );
-    $social_image = wp_get_attachment_url(  $options['kemi_social_images'] );
-  }
-  return $social_image;
-}
-
-
-add_action( 'wpseo_add_opengraph_images', 'add_custom_social_image', 10);
-// add_filter('wpseo_twitter_image','testing_123' , 10, 2 );
-
-function add_custom_social_image($object){
-  //Logic Order
-    // 1st - Social Image on post
-    // 2nd - Featured Image on post
-    // 3rd - Default Image from theme settings
-  $social_image = custom_social_image();
-  $object->add_image($social_image);
-
-}
-
-
- add_filter('wpseo_opengraph_image','filter_custom_social_image' , 10, 2 );
- add_filter('wpseo_twitter_image','filter_custom_social_image' , 10, 2 );
-  function filter_custom_social_image(){
-   //Logic Order
-     // 1st - Social Image on post
-     // 2nd - Featured Image on post
-     // 3rd - Default Image from theme settings
-   $social_image = custom_social_image();
-   return $social_image;
-
-  }
