@@ -30,10 +30,8 @@ jQuery( document ).ready( function( $ ) {
 			// We set multiple to false so only get one image from the uploader
 			attachment = file_frame.state().get('selection').first().toJSON();
 			// Do something with attachment.id and/or attachment.url here
-			$( '#image-preview' ).attr( 'value', attachment.url );
-			$( '#create-new-csv' ).attr( 'csv', attachment.url );
-
-			$( '#kemi_social_images' ).val( attachment.url );
+			$( '#image-preview' ).attr( 'src', attachment.url ).css( 'width', 'auto' );
+			$( '#kemi_social_images' ).val( attachment.id );
 			// Restore the main post ID
 			wp.media.model.settings.post.id = wp_media_post_id;
 		});
