@@ -14,9 +14,17 @@ Domain Path:  /languages
 
 
 
+function my_plugin_init() {
+	if( class_exists( 'WPSEO_Frontend' ) ) {
+    require_once( 'admin/admin-page.php' );
+    require_once( 'admin/post-meta-box.php' );
+    add_action( 'wpseo_add_opengraph_images', 'add_custom_social_image', 10);
+    add_filter('wpseo_opengraph_image','filter_custom_social_image' , 10, 2 );
+    add_filter('wpseo_twitter_image','filter_custom_social_image' , 10, 2 );
+	}
+}
+add_action( 'plugins_loaded', 'my_plugin_init' );
 
-require_once( 'admin/admin-page.php' );
-require_once( 'admin/post-meta-box.php' );
 
 
 function custom_social_image(){
@@ -33,7 +41,7 @@ function custom_social_image(){
 }
 
 
-add_action( 'wpseo_add_opengraph_images', 'add_custom_social_image', 10);
+
 // add_filter('wpseo_twitter_image','testing_123' , 10, 2 );
 
 function add_custom_social_image($object){
@@ -47,8 +55,7 @@ function add_custom_social_image($object){
 }
 
 
- add_filter('wpseo_opengraph_image','filter_custom_social_image' , 10, 2 );
- add_filter('wpseo_twitter_image','filter_custom_social_image' , 10, 2 );
+
   function filter_custom_social_image(){
    //Logic Order
      // 1st - Social Image on post
